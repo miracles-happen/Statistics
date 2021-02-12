@@ -15,14 +15,15 @@ namespace GitlabStats.Report
             _logger = logger;
             _totalItems = 0;
         }
-        public void Print(IReadOnlyDictionary<string, IList<ReportItem>> data)
+        public void Print(Report report)
         {
             try
             {
                 StreamWriter sw = new StreamWriter("Result.csv");
-                foreach (string key in data.Keys)
+                sw.WriteLine($"Report date: {DateTime.Now.ToShortDateString()}, issues since: {report.SinceDate.ToShortDateString()}");
+                foreach (string key in report.Items.Keys)
                 {
-                    PrintMilestoneData(sw, key, data[key]);
+                    PrintMilestoneData(sw, key, report.Items[key]);
                 }
 
                 sw.WriteLine($"Total items: {_totalItems}");
@@ -41,7 +42,7 @@ namespace GitlabStats.Report
 
             foreach (var reportItem in reportItems)
             {
-                string report = $"{reportItem.Id};{reportItem.Title};{reportItem.HumanEstimate};{reportItem.HumanSpent};{reportItem.HumanDiff};{reportItem.Status};";
+                string report = $"{reportItem.Id};{reportItem.Title};{reportItem.HumanEstimate};{reportItem.HumanSpent};{reportItem.HumanDiff};{reportItem.Status};"; // TODO duplication
                 if (reportItem.Estimate > 0) 
                 {
                     report += $"{reportItem.Estimate.ToString("F2")};{reportItem.Spent.ToString("F2")};";

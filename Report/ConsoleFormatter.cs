@@ -7,11 +7,12 @@ namespace GitlabStats.Report
 {
     class ConsoleFormatter : IReportFormatter
     {
-        public void Print(IReadOnlyDictionary<string, IList<ReportItem>> data) 
+        public void Print(Report report) 
         {
-            foreach (string key in data.Keys) 
+            Console.WriteLine($"Report date: {DateTime.Now}, issues since: {report.SinceDate}");
+            foreach (string key in report.Items.Keys) 
             {
-                PrintMilestoneData(key, data[key]);
+                PrintMilestoneData(key, report.Items[key]);
             }
         }
 

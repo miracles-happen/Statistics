@@ -31,7 +31,7 @@ namespace GitlabStats
                 _logger.LogInformation($"Builder starts since date {since}");
 
                 var issues = await _store.FindTasksAsync(since);
-                _reportBuilder.Build(issues);
+                _reportBuilder.Build(issues, since);
             }
             catch (Exception ex)
             {
