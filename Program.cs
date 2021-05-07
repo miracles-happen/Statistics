@@ -13,7 +13,10 @@ namespace GitlabStats
     class Program
     {
         // TODO access token remove
-        static readonly DateTime _since = new DateTime(2021, 01, 20);  // TODO: move to console args
+        //20.01.2021
+        // 12.02.2021
+        // 05.03.2021
+        static readonly DateTime _since = new DateTime(2021, 03, 05);  // TODO: move to console args
 
         static void Main()
         {
@@ -46,9 +49,15 @@ namespace GitlabStats
             var services = ConfigureServices();
             var serviceProvider = services.BuildServiceProvider();
 
-            var statisticBuilder = serviceProvider.GetService<IStatisticBuilder>();
-            await statisticBuilder.RunAsync(_since);
+            //var statisticBuilder = serviceProvider.GetService<IStatisticBuilder>();
+            //await statisticBuilder.RunAsync(_since);
+
+
+            // milestone comparing from GitLab &GoogleDoc
+            var milestoneComparer = serviceProvider.GetService<IMilestoneComparer>();
+            await milestoneComparer.RunAsync("ПМП-3.15.0");
         }
+           
 
         public static IServiceCollection ConfigureServices()
         {
@@ -67,7 +76,8 @@ namespace GitlabStats
                 .AddScoped<IIssueStore, GitLabClient>()
                 //.AddScoped<IReportFormatter, ConsoleFormatter>()
                 .AddScoped<IReportFormatter, CsvFormatter>()
-                .AddScoped<IReportBuilder, ReportBuilder>();
+                .AddScoped<IReportBuilder, ReportBuilder>()
+                .AddScoped<IMilestoneComparer, MilestoneComparer>();
 
             return services;
         }

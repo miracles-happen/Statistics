@@ -59,6 +59,47 @@ namespace GitlabStats.GitlabApi
             return issues;
         }
 
+        public async Task<IEnumerable<Issue>> FindTasksByMilestoneAsync(string milestone)
+        {
+            _logger.LogInformation($"Making call to Gitlab for page {_currentPage}.");
+
+            try
+            {
+                var response = await _gitlabApi.GetIssuesByMilestoneAsync(milestone, _currentPage);
+
+                if (response.ResponseMessage.StatusCode == HttpStatusCode.OK)
+                {
+                    _issuesDto.AddRange(response.GetContent());
+
+                    var pagesCount = GetTotalPages(response.ResponseMessage.Headers);
+                    _totalItems = GetTotalItems(response.ResponseMessage.Headers);
+
+                    if (_currentPage < pagesCount)
+                    {
+                        _logger.LogWarning($"Milestone has more than 100 issues!! Total pagesCount: {pagesCount}");
+                    }
+                }
+                else
+                {
+                    _logger.LogError("Request failed: " + response.StringContent);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception occurred on retrieveing data from GitLab");
+            }
+
+            var issues = new List<Issue>();
+
+            foreach (var issueDto in _issuesDto)
+            {
+               issues.Add(issueDto.MapToIssue());
+            }
+
+            _logger.LogInformation($"Found {_issuesDto.Count} items in milestone.");
+            return issues;
+        }
+
         private string ToIso8601DateString(DateTime dateTime)
         {
             return dateTime.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");

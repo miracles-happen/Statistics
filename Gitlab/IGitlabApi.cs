@@ -14,6 +14,9 @@ namespace GitlabStats.Gitlab
 
         [Get("api/v4/issues?pagination=keyset&per_page=100&scope=all&state=closed&labels=CMS&order_by=updated_at")]
         Task<Response<IEnumerable<IssueDto>>> GetIssuesAsync([Query] string updated_after, [Query] int page);
+
+        [Get("api/v4/issues?pagination=keyset&per_page=100&scope=all")]
+        Task<Response<IEnumerable<IssueDto>>> GetIssuesByMilestoneAsync([Query] string milestone, [Query] int page);
     }
 
 

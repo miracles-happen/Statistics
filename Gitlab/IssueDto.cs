@@ -18,7 +18,7 @@ namespace GitlabStats.Gitlab
         public TimeStatsDto TimeStats { get; set; }
 
         [JsonProperty("closed_at")]
-        public DateTime CloseDate { get; set; }
+        public DateTime? CloseDate { get; set; }
 
         public override string ToString() 
         {

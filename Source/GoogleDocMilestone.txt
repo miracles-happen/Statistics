@@ -1,0 +1,12 @@
+3345 Перепривязка токена должна быть отклонена, если карта ранее зарегистрирована в системе
+3445 Add indexes into xPayTSM/Wallet MySQL tables
+3447 Optimize tsp create token request
+3449 Падение epay_tsm_iso_gateway при продолжительной нагрузке
+3416 Add group of RabbitMQ hosts in the Ansible inventory
+3457 Изменение Crypto API
+3328 Добавление автотестов по app2app c PCD.time в строковом формате
+3356 Проанализировать невалидные состояния enrollments в БД mccore
+3448 Token cache latencies
+3326 Исследовать проблему кэширования IP адресов в nginx
+3443 Crypto request latencies
+3461 [xPay]Лимит UserMax срабатывает по walletId
