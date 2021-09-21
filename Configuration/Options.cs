@@ -10,12 +10,17 @@ namespace GitlabStats
         public Options(IConfigurationRoot configurationRoot)
         {
             GitlabUrl = configurationRoot.GetValue<string>("Gitlab:Url");
-            AccessToken = configurationRoot.GetValue<string>("Gitlab:AccessToken");
+            GitlabAccessToken = configurationRoot.GetValue<string>("Gitlab:AccessToken");
+            JiraUrl = configurationRoot.GetValue<string>("Jira:Url");
+            JiraBasicAuth = configurationRoot.GetValue<string>("Jira:BasicAuth");
         }
-
 
         public string GitlabUrl { get; set; }
 
-        public string AccessToken { get; set; }
+        public string GitlabAccessToken { get; set; }
+
+        public string JiraUrl { get; set; }
+
+        public string JiraBasicAuth { get; set; }
     }
 }

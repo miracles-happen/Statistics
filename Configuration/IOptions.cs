@@ -8,6 +8,10 @@ namespace GitlabStats
     {
         public string GitlabUrl { get; set; }
 
-        public string AccessToken { get; set; }
+        public string GitlabAccessToken { get; set; }
+
+        public string JiraUrl { get; set; }
+
+        public string JiraBasicAuth { get; set; }
     }
 }

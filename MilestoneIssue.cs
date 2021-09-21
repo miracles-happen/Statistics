@@ -10,6 +10,8 @@ namespace GitlabStats
 
         public string Title { get; set; }
 
+        public string Description { get; set; }
+
         public string Milestone { get; set; }
 
         public TimeStats TimeStats { get; set; }

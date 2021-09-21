@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using GitlabStats.GitlabApi;
+using GitlabStats.Jira;
+using GitlabStats.JiraVersionComparing;
 using GitlabStats.MilestoneDiagram;
 using GitlabStats.PrerequisiteCheck;
 using GitlabStats.Report;
@@ -59,8 +61,11 @@ namespace GitlabStats
             //var milestoneDiagram = serviceProvider.GetService<IMilestoneDiagram>();
             //await milestoneDiagram.RunAsync();
 
-            var prerequisiteCheck = serviceProvider.GetService<IPrerequisiteCheck>();
-            await prerequisiteCheck.RunAsync();
+            //var prerequisiteCheck = serviceProvider.GetService<IPrerequisiteCheck>();
+            //await prerequisiteCheck.RunAsync();
+
+            var jiraComparer = serviceProvider.GetService<IJiraVersionComparer>();
+            await jiraComparer.RunAsync();
         }
            
 
@@ -84,7 +89,9 @@ namespace GitlabStats
                 .AddScoped<IReportBuilder, ReportBuilder>()
                 .AddScoped<IMilestoneDiagram, MilestoneDiagram.MilestoneDiagram>()
                 .AddScoped<IPrerequisiteCheck, PrerequisiteCheck.PrerequisiteCheck>()
-                .AddScoped<IMilestoneComparer, MilestoneComparer>();
+                .AddScoped<IMilestoneComparer, MilestoneComparer>()
+                .AddScoped<IJiraVersionComparer, JiraVersionComparer>()
+                .AddScoped<IJiraStore, JiraClient>();
 
             return services;
         }
@@ -92,7 +99,7 @@ namespace GitlabStats
         private static IConfigurationRoot GetConfiguration()
         {
             var builder = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", optional: true);
+                .AddJsonFile("appsettings.json", optional: true).AddEnvironmentVariables();
 
             return builder.Build();
         }

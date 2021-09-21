@@ -12,6 +12,8 @@ namespace GitlabStats.Gitlab
 
         public string Title { get; set; }
 
+        public string Description { get; set; }
+
         public MilestoneDto Milestone { get; set; }
 
         [JsonProperty("time_stats")]
@@ -31,6 +33,7 @@ namespace GitlabStats.Gitlab
             {
                 Id = Id,
                 Title = Title,
+                Description = Description,
                 Milestone = Milestone?.Title ?? "<No milestone>",
                 TimeStats = new TimeStats()
                 {

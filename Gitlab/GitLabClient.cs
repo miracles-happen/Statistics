@@ -29,7 +29,7 @@ namespace GitlabStats.GitlabApi
             _logger = logger;
             _url = options.GitlabUrl;
             _gitlabApi = RestClient.For<IGitlabApi>(_url);
-            _gitlabApi.AccessToken = options.AccessToken;
+            _gitlabApi.AccessToken = options.GitlabAccessToken;
 
             _currentPage = 1;
             _issuesDto = new List<IssueDto>();
