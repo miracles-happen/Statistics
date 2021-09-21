@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using GitlabStats.GitlabApi;
+using GitlabStats.MilestoneDiagram;
+using GitlabStats.PrerequisiteCheck;
 using GitlabStats.Report;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,10 +15,7 @@ namespace GitlabStats
     class Program
     {
         // TODO access token remove
-        //20.01.2021
-        // 12.02.2021
-        // 05.03.2021
-        static readonly DateTime _since = new DateTime(2021, 03, 05);  // TODO: move to console args
+        static readonly DateTime _since = new DateTime(2021, 08, 19);  // TODO: move to console args
 
         static void Main()
         {
@@ -52,10 +51,16 @@ namespace GitlabStats
             //var statisticBuilder = serviceProvider.GetService<IStatisticBuilder>();
             //await statisticBuilder.RunAsync(_since);
 
+            // milestone comparing from GitLab & GoogleDoc
+            // var milestoneComparer = serviceProvider.GetService<IMilestoneComparer>();
+            // await milestoneComparer.RunAsync("ПМП-3.17.0");
 
-            // milestone comparing from GitLab &GoogleDoc
-            var milestoneComparer = serviceProvider.GetService<IMilestoneComparer>();
-            await milestoneComparer.RunAsync("ПМП-3.15.0");
+            // issue links
+            //var milestoneDiagram = serviceProvider.GetService<IMilestoneDiagram>();
+            //await milestoneDiagram.RunAsync();
+
+            var prerequisiteCheck = serviceProvider.GetService<IPrerequisiteCheck>();
+            await prerequisiteCheck.RunAsync();
         }
            
 
@@ -77,6 +82,8 @@ namespace GitlabStats
                 //.AddScoped<IReportFormatter, ConsoleFormatter>()
                 .AddScoped<IReportFormatter, CsvFormatter>()
                 .AddScoped<IReportBuilder, ReportBuilder>()
+                .AddScoped<IMilestoneDiagram, MilestoneDiagram.MilestoneDiagram>()
+                .AddScoped<IPrerequisiteCheck, PrerequisiteCheck.PrerequisiteCheck>()
                 .AddScoped<IMilestoneComparer, MilestoneComparer>();
 
             return services;

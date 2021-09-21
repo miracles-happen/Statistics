@@ -19,8 +19,8 @@ namespace GitlabStats
         private readonly IIssueStore _store;
         private readonly ILogger<MilestoneComparer> _logger;
         private readonly string _googleDocFilePath;
-        private readonly List<Issue> _googleDocIssues;
-        private IEnumerable<Issue> _gitlabIssues;
+        private readonly List<MilestoneIssue> _googleDocIssues;
+        private IEnumerable<MilestoneIssue> _gitlabIssues;
 
 
         public MilestoneComparer(IIssueStore store, ILogger<MilestoneComparer> logger)
@@ -28,7 +28,7 @@ namespace GitlabStats
             _store = store;
             _logger = logger;
             _googleDocFilePath = "..\\..\\..\\Source\\GoogleDocMilestone.txt";
-            _googleDocIssues = new List<Issue>();
+            _googleDocIssues = new List<MilestoneIssue>();
         }
 
         public async Task RunAsync(string milestone)
@@ -76,7 +76,7 @@ namespace GitlabStats
             int id = Int32.Parse(line.Substring(0, spaceIndex));
             string title = line.Substring(spaceIndex + 1);
 
-            _googleDocIssues.Add(new Issue() { Id = id, Title = title });
+            _googleDocIssues.Add(new MilestoneIssue() { Id = id, Title = title });
         }
 
         private void ListIssuesNotFoundInGitLab() 

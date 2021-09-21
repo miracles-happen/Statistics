@@ -17,6 +17,15 @@ namespace GitlabStats.Gitlab
 
         [Get("api/v4/issues?pagination=keyset&per_page=100&scope=all")]
         Task<Response<IEnumerable<IssueDto>>> GetIssuesByMilestoneAsync([Query] string milestone, [Query] int page);
+
+        [Get("api/v4/projects/169/issues/{id}")]
+        Task<Response<IssueDto>> GetIssueAsync([Path] int id);
+
+        [Get("api/v4/projects/169/issues/{id}/links")]
+        Task<Response<IEnumerable<IssueLinkDto>>> GetIssueLinksAsync([Path] int id);
+
+        [Get("api/v4/projects/169/issues/{id}/related_merge_requests")]
+        Task<Response<IEnumerable<MergeRequestDto>>> GetRelatedMergeRequestsForIssueAsync([Path] int id);
     }
 
 

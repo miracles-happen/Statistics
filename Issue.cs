@@ -4,15 +4,32 @@ using System.Text;
 
 namespace GitlabStats
 {
-    class Issue
+    public class Issue
     {
-        public int Id { get; set; }
+        public int Id { get; private set; }
 
-        public string Title { get; set; }
+        public string Title { get; private set; }
 
-        public string Milestone { get; set; }
+        public string Estimation { get; private set; }
 
-        public TimeStats TimeStats { get; set; }
+        public Issue(int id, string title) : this (id, title, string.Empty)
+        {
+        }
+
+        public Issue(int id, string title, string estimation) 
+        {
+            Id = id;
+            Title = CleanTitle(title);
+            Estimation = estimation;
+        }
+
+        public override string ToString() 
+        {
+            if(!string.IsNullOrEmpty(Estimation))
+                return $"\"{Id} {Title}\\n({Estimation})\"";
+            else
+                return $"\"{Id} {Title}\"";
+        }
 
         public override bool Equals(Object obj)
         {
@@ -33,20 +50,17 @@ namespace GitlabStats
             return Id.GetHashCode();
         }
 
-        public override string ToString()
+        private string CleanTitle(string title) 
         {
-            return $"{Id} {Title}";
+            int startIndex = title.IndexOf("[");
+            int endIndex = title.IndexOf("]");
+
+            if(endIndex > startIndex && startIndex >= 0) 
+            {
+                title = title.Substring(endIndex + 2);
+            }
+
+            return title.Replace("\"", "\'");
         }
-    }
-
-    class TimeStats 
-    {
-        public int Estimate { get; set; }
-
-        public int Spent { get; set; }
-
-        public string HumanEstimate { get; set; }
-
-        public string HumanSpent { get; set; }
     }
 }

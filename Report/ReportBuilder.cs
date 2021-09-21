@@ -7,7 +7,7 @@ namespace GitlabStats.Report
 {
     interface IReportBuilder 
     {
-        void Build(IEnumerable<Issue> issues, DateTime since);
+        void Build(IEnumerable<MilestoneIssue> issues, DateTime since);
     }
 
     class ReportBuilder : IReportBuilder
@@ -23,7 +23,7 @@ namespace GitlabStats.Report
             _reportFormatter = formatter;
             _logger = logger;
         }
-        public void Build(IEnumerable<Issue> issues, DateTime since) 
+        public void Build(IEnumerable<MilestoneIssue> issues, DateTime since) 
         {
             _logger.LogInformation("Build report starts.");
 
@@ -34,7 +34,7 @@ namespace GitlabStats.Report
             _logger.LogInformation("Build report finishes");
         }
 
-        private void PrepareReportData(IEnumerable<Issue> issues) 
+        private void PrepareReportData(IEnumerable<MilestoneIssue> issues) 
         {
             foreach (var issue in issues)
             {

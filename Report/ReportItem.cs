@@ -6,7 +6,7 @@ namespace GitlabStats.Report
 {
     class ReportItem
     {
-        private readonly Issue _issue;
+        private readonly MilestoneIssue _issue;
 
         public int Id { get => _issue.Id; }
         public string Title { get => _issue.Title; }
@@ -26,7 +26,7 @@ namespace GitlabStats.Report
         public string HumanDiff { get; }
         public IssueStatus Status { get; }
 
-        public ReportItem(Issue issue) 
+        public ReportItem(MilestoneIssue issue) 
         {
             _issue = issue;
 

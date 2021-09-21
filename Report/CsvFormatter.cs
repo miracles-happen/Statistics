@@ -19,7 +19,7 @@ namespace GitlabStats.Report
         {
             try
             {
-                StreamWriter sw = new StreamWriter("Result.csv");
+                StreamWriter sw = new StreamWriter("Result.csv", false, new UTF8Encoding(true));
                 sw.WriteLine($"Report date: {DateTime.Now.ToShortDateString()}, issues since: {report.SinceDate.ToShortDateString()}");
                 foreach (string key in report.Items.Keys)
                 {

@@ -25,9 +25,9 @@ namespace GitlabStats.Gitlab
             return String.Format($"[{Id}] {Title}\n{Milestone}\nTimeStats:{TimeStats}\n\n\n");
         }
 
-        internal Issue MapToIssue() 
+        internal MilestoneIssue MapToMilestoneIssue() 
         {
-            var issue = new Issue()
+            var issue = new MilestoneIssue()
             {
                 Id = Id,
                 Title = Title,
