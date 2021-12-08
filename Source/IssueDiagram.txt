@@ -1,3 +1,2 @@
-﻿3551 Saving issuerCardId in enrollments table
-3125 XPay TSM refactoring TCN sending
-3518 Перенос процесса шифрования PAN из xPay TSM в Wallet Service
+﻿1234 Title
+5678 Title2

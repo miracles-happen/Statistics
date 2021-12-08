@@ -18,6 +18,7 @@ namespace GitlabStats
         // TODO: refactor   
         private readonly IIssueStore _store;
         private readonly ILogger<MilestoneComparer> _logger;
+        private readonly string _gitLabPrefix;
         private readonly string _googleDocFilePath;
         private readonly List<MilestoneIssue> _googleDocIssues;
         private IEnumerable<MilestoneIssue> _gitlabIssues;
@@ -27,6 +28,7 @@ namespace GitlabStats
         {
             _store = store;
             _logger = logger;
+            _gitLabPrefix = "ПМП-";
             _googleDocFilePath = "..\\..\\..\\Source\\GoogleDocMilestone.txt";
             _googleDocIssues = new List<MilestoneIssue>();
         }
@@ -35,6 +37,8 @@ namespace GitlabStats
         {
             try
             {
+                milestone = $"{ _gitLabPrefix}{milestone}";
+
                 _logger.LogInformation($"Comparer starts for milestone {milestone}");
 
                 _gitlabIssues = await _store.FindTasksByMilestoneAsync(milestone);

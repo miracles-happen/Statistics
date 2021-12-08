@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using GitlabStats.GitlabApi;
@@ -17,10 +18,12 @@ namespace GitlabStats
     class Program
     {
         // TODO access token remove
-        static readonly DateTime _since = new DateTime(2021, 08, 19);  // TODO: move to console args
+        static readonly DateTime _since = new DateTime(2021, 11, 15);  // TODO: move to console args
 
         static void Main()
         {
+            Console.OutputEncoding = Console.InputEncoding = Encoding.Unicode;
+
             CancellationTokenSource cts = new CancellationTokenSource();
 
             Console.CancelKeyPress += (s, e) =>
@@ -50,24 +53,24 @@ namespace GitlabStats
             var services = ConfigureServices();
             var serviceProvider = services.BuildServiceProvider();
 
-            //var statisticBuilder = serviceProvider.GetService<IStatisticBuilder>();
-            //await statisticBuilder.RunAsync(_since);
+            // var statisticBuilder = serviceProvider.GetService<IStatisticBuilder>();
+            // await statisticBuilder.RunAsync(_since);
 
             // milestone comparing from GitLab & GoogleDoc
-            // var milestoneComparer = serviceProvider.GetService<IMilestoneComparer>();
-            // await milestoneComparer.RunAsync("ПМП-3.17.0");
-
-            // issue links
-            //var milestoneDiagram = serviceProvider.GetService<IMilestoneDiagram>();
-            //await milestoneDiagram.RunAsync();
-
-            //var prerequisiteCheck = serviceProvider.GetService<IPrerequisiteCheck>();
-            //await prerequisiteCheck.RunAsync();
+            var milestoneComparer = serviceProvider.GetService<IMilestoneComparer>();
+            await milestoneComparer.RunAsync("3.17.2");
 
             var jiraComparer = serviceProvider.GetService<IJiraVersionComparer>();
-            await jiraComparer.RunAsync();
+            await jiraComparer.RunAsync("3.17.2");
+
+            // issue links
+            // var milestoneDiagram = serviceProvider.GetService<IMilestoneDiagram>();
+            // await milestoneDiagram.RunAsync();
+
+            // var prerequisiteCheck = serviceProvider.GetService<IPrerequisiteCheck>();
+            // await prerequisiteCheck.RunAsync();
         }
-           
+
 
         public static IServiceCollection ConfigureServices()
         {

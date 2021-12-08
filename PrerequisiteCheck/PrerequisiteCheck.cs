@@ -26,19 +26,8 @@ namespace GitlabStats.PrerequisiteCheck
             _store = store;
             _logger = logger;
 
-            
-            // 3.15*
-            // _issueId = 3696;
-            /*
-             * _issueId = 3726;
-            _issueBranch = "stable-3.15";
-            _branchesForPorting = new List<string>() { "stable-3.16", "master" };
-            */
-
-            // 3.16*
-            // _issueId = 3715;
-            _issueId = 3713;
-            _issueBranch = "stable-3.16";
+            _issueId = 3761;
+            _issueBranch = "stable-3.17";
             _branchesForPorting = new List<string>() { "master" };
         }
 

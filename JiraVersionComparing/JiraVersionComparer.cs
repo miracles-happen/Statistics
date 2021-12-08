@@ -10,12 +10,11 @@ namespace GitlabStats.JiraVersionComparing
 {
     interface IJiraVersionComparer
     {
-        public Task RunAsync();
+        public Task RunAsync(string milestone);
     }
 
     class JiraVersionComparer :IJiraVersionComparer
     {
-        private readonly string _milestone;
         private readonly IJiraStore _jiraStore;
         private readonly IIssueStore _gitLabStore;
         private readonly ILogger<JiraVersionComparer> _logger;
@@ -32,22 +31,21 @@ namespace GitlabStats.JiraVersionComparing
             _gitLabStore = gitLabStore;
             _logger = logger;
 
-            _milestone = "3.16.1";
             _gitLabPrefix = "ПМП-";
             _jiraLink = "https://jira.nspk.ru/browse/";
         }
 
-        public async Task RunAsync()
+        public async Task RunAsync(string milestone)
         {
             try
             {
-                _logger.LogInformation($"Comparer starts for milestone {_milestone}");
+                _logger.LogInformation($"Comparer starts for milestone {milestone}");
 
-                _jiraIssues = await _jiraStore.FindTasksByVersionAsync(_milestone);
-                _gitlabIssues = await _gitLabStore.FindTasksByMilestoneAsync(_gitLabPrefix + _milestone);
+                _jiraIssues = await _jiraStore.FindTasksByVersionAsync(milestone);
+                _gitlabIssues = await _gitLabStore.FindTasksByMilestoneAsync(_gitLabPrefix + milestone);
 
                 ListIssuesNotFoundInJira();
-                ListIssuesNotFoundInGitLab();
+                await ListIssuesNotFoundInGitLabAsync(milestone);
             }
             catch (Exception ex)
             {
@@ -75,7 +73,7 @@ namespace GitlabStats.JiraVersionComparing
 
                     if (!JiraListHasIssue(jiraLink))
                     {
-                        sb.AppendLine($"   - {jiraLink} from GitLab gitLabIssue {gitLabIssue}");
+                        sb.AppendLine($"   - {jiraLink} from GitLab GitLab Issue \"{gitLabIssue}\"");
                     }
                 }
             }
@@ -107,10 +105,12 @@ namespace GitlabStats.JiraVersionComparing
             if (jiraLink.EndsWith(")"))
                 jiraLink = jiraLink.Substring(0, jiraLink.Length - 1);
 
-            return jiraLink;
+            var references = jiraLink.Split(' ');
+
+            return references[0];
         }
 
-        private void ListIssuesNotFoundInGitLab()
+        private async Task ListIssuesNotFoundInGitLabAsync(string milestone)
         {
             var sb = new StringBuilder();
             sb.AppendLine("****************************************************");
@@ -121,8 +121,12 @@ namespace GitlabStats.JiraVersionComparing
                 {
                     if (!GitLabListHasIssue(externalRef))
                     {
-                        sb.AppendLine($"   - {jiraIssue.Key}: {externalRef} not found in GitLab milestone");
+                        var detailedGitLabIssue = await _gitLabStore.GetTaskAsync(externalRef);
 
+                        if (!IsAnalyticsIssue(detailedGitLabIssue)) 
+                        {
+                            sb.AppendLine($"   - {jiraIssue.Key}: {externalRef} not found in {milestone} milestone. {externalRef} with state {detailedGitLabIssue.State} actually present in milestone {detailedGitLabIssue.Milestone}");
+                        }
                     }
                 }
             }
@@ -134,6 +138,14 @@ namespace GitlabStats.JiraVersionComparing
         private bool GitLabListHasIssue(int id) 
         {
             return _gitlabIssues.Where(gitLabIssue => gitLabIssue.Id.Equals(id)).Any();
+        }
+
+        private bool IsAnalyticsIssue(Issue issue) 
+        {
+            if (issue.Title.EndsWith("(analytics)") || issue.Title.EndsWith("(analysis)"))
+                return true;
+            else
+                return false;
         }
     }
 }

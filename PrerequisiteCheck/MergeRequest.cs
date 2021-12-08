@@ -30,6 +30,6 @@ namespace GitlabStats.PrerequisiteCheck
     {
         Closed,
         Merged,
-        Open
+        Opened
     }
 }

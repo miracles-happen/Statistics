@@ -114,7 +114,7 @@ namespace GitlabStats.GitlabApi
                 if (response.ResponseMessage.StatusCode == HttpStatusCode.OK)
                 {
                     var issueDto = response.GetContent();
-                    issue = new Issue(issueDto.Id, issueDto.Title, issueDto.TimeStats.HumanEstimate);
+                    issue = new Issue(issueDto.Id, issueDto.Title, issueDto.TimeStats.HumanEstimate, issueDto.Milestone?.Title, issueDto.State);
                 }
                 else
                 {

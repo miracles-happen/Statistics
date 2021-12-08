@@ -39,8 +39,6 @@ namespace GitlabStats.MilestoneDiagram
             try
             {
                 _logger.LogInformation("Diagram starts");
-
-                //_gitlabIssues = await _store.FindTasksByMilestoneAsync(milestone);
                 await LoadSourceIssues();
                 await ProcessIssuesAsync();
                 PrintResults();
@@ -76,8 +74,6 @@ namespace GitlabStats.MilestoneDiagram
             int spaceIndex = line.IndexOf(' ');
 
             int id = Int32.Parse(line.Substring(0, spaceIndex));
-            string title = line.Substring(spaceIndex + 1);
-
 
             var issue = await _store.GetTaskAsync(id);
            _sourceIssues.Add(issue);
@@ -132,7 +128,7 @@ namespace GitlabStats.MilestoneDiagram
 
             using (StreamWriter sw = new StreamWriter(_outputPath))
             {
-                sw.Write(result);  // todo async
+                sw.Write(result);
             }
 
             Console.WriteLine(result);
@@ -140,6 +136,7 @@ namespace GitlabStats.MilestoneDiagram
 
         private void BeginDiagram(StringBuilder sb) 
         {
+            sb.AppendLine("```plantuml");
             sb.AppendLine("@startuml");
             sb.AppendLine();
             sb.AppendLine("digraph world {");
@@ -168,6 +165,7 @@ namespace GitlabStats.MilestoneDiagram
             sb.AppendLine("}");
             sb.AppendLine();
             sb.AppendLine("@enduml");
+            sb.AppendLine("```");
             sb.AppendLine();
         }
     }
